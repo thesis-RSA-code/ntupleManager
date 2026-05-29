@@ -1,0 +1,25 @@
+# WCTE v2 production: concatenated extra_data ROOT -> hierarchical HDF5
+geometry: "WCTE"
+tree_name: "pure_root_tree"
+input_file: "/sps/hyperk/mferey/Data/WCTE_v2/Concatenated/WCTE_uni_iso_FC_e-_0-1000MeV_3M_extra_data.root"
+output_file: "/sps/t2k/eleblevec/mini-Caverns-toolsbox/datasets/wcte_prod/h5/WCTE_uni_iso_FC_e-_0-1000MeV.h5"
+
+field_config:
+  - "n_digi_hits"
+  - "energy"
+  - "event_type"
+  - "towall"
+  - "dwall"
+  - "trigger_time"
+  - "vertex"
+  - "particle_dir"
+  - "particle_stop"
+  - "pmt_charge"
+  - "pmt_time"
+  - "tube_ids"
+
+uproot_step_size: "200MB"
+storage_mode: "hierarchical"
+compression: "gzip"
+monitor_ram: false
+monitor_interval: 10000

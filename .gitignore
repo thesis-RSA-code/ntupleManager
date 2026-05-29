@@ -1,0 +1,50 @@
+# SLURM job artifacts (per-run copies of configs + logs)
+jobs/
+
+# Python bytecode and test caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Developer smoke / one-off tests (hard-coded cluster paths)
+_smoke_wcte_to_ghosthunter.py
+*smoke*
+smoke_*.py
+
+# Conversion outputs and profiling sidecars
+*.h5
+*.hdf5
+*.root
+extraction_monitoring.npz
+*_monitoring.npz
+
+# SLURM / batch logs (if written outside jobs/)
+slurm-*.out
+slurm-*.err
+*.o[0-9]*
+*.e[0-9]*
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / local env
+.env
+.env.*
+*.pem
+credentials.json
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Playground scratch (referenced by some example configs)
+playground/

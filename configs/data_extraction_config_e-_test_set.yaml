@@ -1,0 +1,35 @@
+# Configuration file for data extraction from ROOT files
+# This file defines what data to extract and how to save it
+
+# ---------------------------------
+
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/Ndigit_40_1Mevents/test_1_a1000/merged_e-_50-1500MeV.root"
+geometry: "HyperK"
+input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/Ndigit_40_1Mevents/test_1_a1000/merged_e-_50-1500MeV.root"
+output_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/Ndigit_40_1Mevents/test_1_a1000/h5_data_block_chunks/e-_50-1500MeV_folder1_a1000_with_tube_ids.h5"
+# ROOT file settings
+tree_name: "pure_root_tree"
+
+# All available variables to extract
+# by default n_digi_hits, kinetic_energy, pid, vertex, towall, dwall, trigger_time are extracted
+field_config:
+  - "n_digi_hits"
+  - "energy"
+  - "event_type"
+  - "towall"
+  - "dwall"
+  - "trigger_time"
+  - "vertex"
+  - "particle_dir"
+  - "particle_stop"
+  - "particle_start"
+  - "pmt_charge"
+  - "pmt_time"
+  - "tube_ids"
+
+  # Add more vector fields as needed
+  # momentum: ["momentum_x", "momentum_y", "momentum_z"]
+
+# Monitoring settings
+monitor_ram: false
+monitor_interval: 500  # Check RAM every N events

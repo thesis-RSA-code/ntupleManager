@@ -1,0 +1,46 @@
+# Configuration file for data extraction from ROOT files
+# This file defines what data to extract and how to save it
+
+# Input/Output paths
+#debug 
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/test_folder_0_a399/merged_e-_50-1500MeV_folder1_a2.root"
+
+# muons
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/mu-/50-1500MeV/train_val_400_a1000/merged_mu-_50-1500MeV_folder400_a1000.root"
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/mu-/50-1500MeV/test_0_a399/merged_mu-_50-1500MeV_folder0_a399.root"
+
+# electrons
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/test_folder_0_a399/merged_e-_50-1500MeV_folder0_a399.root"
+# input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/e-/50-1500MeV/train_val_folder_400_a1000/merged_e-_50-1500MeV_folder400_a1000.root"
+# ---------------------------------
+
+input_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/mu-/50-1500MeV/train_val_400_a1000/merged_mu-_50-1500MeV_folder400_a1000.root"
+output_file: "/sps/t2k/eleblevec/Datasets/custom_dataset/mu-/50-1500MeV/train_val_400_a1000/h5_data/interact_full_vectors_vars_hierar_mu-_50-1500MeV_folder400_a1000.h5"
+# ROOT file settings
+tree_name: "pure_root_tree"
+
+# All available variables to extract
+# by default n_digi_hits, kinetic_energy, pid, vertex, towall, dwall, trigger_time are extracted
+scalar_fields_config:
+  - "charge"
+  - "time"
+  - "hitx"
+  - "hity"
+  - "hitz"  
+  
+vector_fields_config:
+  vertex: ["vertex_x", "vertex_y", "vertex_z"]
+  particleDir: ["particle_dir_x", "particle_dir_y", "particle_dir_z"]
+  particleStop: ["particle_stop_x", "particle_stop_y", "particle_stop_z"]
+  particleStart: ["particle_start_x", "particle_start_y", "particle_start_z"]
+  
+  # Add more vector fields as needed
+  # momentum: ["momentum_x", "momentum_y", "momentum_z"]
+
+# HDF5 settings
+storage_mode: "hierarchical"
+compression: "gzip"
+
+# Monitoring settings
+monitor_ram: true
+monitor_interval: 500  # Check RAM every N events

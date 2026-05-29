@@ -1,0 +1,37 @@
+# Example configuration file for WCTE geometry data extraction
+# This demonstrates how to use the geometry mapping system
+
+# Input/Output paths
+input_file: /sps/t2k/eleblevec/Datasets/custom_dataset/e-/200-1000MeV/WCTE_center_iso/test_1_a5/merged_e-_200-1000MeV.root
+output_file: /sps/t2k/eleblevec/Datasets/custom_dataset/e-/200-1000MeV/WCTE_center_iso/test_1_a5/merged_e-_200-1000MeV_folder1_a5.h5
+
+# ROOT file settings
+tree_name: "pure_root_tree"  # Adjust based on your WCTE ROOT file
+
+# Geometry configuration - NEW PARAMETER
+geometry: "WCTE"  # Options: "HyperK", "WCTE"
+
+# All available variables to extract (using standard HDF5 names)
+# The geometry mapping will automatically translate these to WCTE ROOT field names
+scalar_fields_config:
+  - "charge"       # Will be mapped to WCTE's 'charge'
+  - "time"         # Will be mapped to WCTE's 'time'
+  - "hitx"         # Will be mapped to WCTE's 'hitx'
+  - "hity"         # Will be mapped to WCTE's 'hity'
+  - "hitz"         # Will be mapped to WCTE's 'hitz'
+  # - "hit_profile"  # WCTE-specific field
+  
+vector_fields_config:
+  vertex: ["vertex_x", "vertex_y", "vertex_z"]                    # Maps to WCTE's 'vertex'
+  particle_dir: ["particle_dir_x", "particle_dir_y", "particle_dir_z"]  # Maps to WCTE's 'particleDir'
+  particle_stop: ["particle_stop_x", "particle_stop_y", "particle_stop_z"]  # Maps to WCTE's 'particleStop'
+  # Note: particle_start is not available in WCTE, so it will be skipped with a warning
+
+# HDF5 settings
+storage_mode: "hierarchical"
+compression: "gzip"
+
+# Monitoring settings
+monitor_ram: false
+monitor_interval: 500  # Check RAM every N events
+
