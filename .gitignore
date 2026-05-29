@@ -48,3 +48,8 @@ credentials.json
 
 # Playground scratch (referenced by some example configs)
 playground/
+
+doc/EDGE_FORMAT_CHANGE_README.md
+doc/GEOMETRY_MAPPING_README.md
+doc/PIPELINES_OVERVIEW.md
+doc/STATE_OF_NTUPLE_MANAGER.md
