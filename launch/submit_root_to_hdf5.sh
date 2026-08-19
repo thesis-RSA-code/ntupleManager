@@ -20,7 +20,6 @@ USE_TMP="true"
 # Not exported variables
 SLURM_PARTITION="htc"
 
-
 # --------- EXECUTED CODE --------- #
 yaml_file=$1
 
