@@ -10,6 +10,7 @@ This package does **not** read raw WCSim `wcsim_output_*.root` files. That step 
 |----------|-------------|----------|
 | HK FD (`HyperK`) | `root_to_hier_hdf5.py --config configs/...yaml` | `utils/geometry_mappings.py` maps HDF5 field names → ROOT branch names |
 | WCTE v2 | `root_to_hier_hdf5_wcte.py` (or `--detector WCTE` on the HK script) | Inline branch mapping in `root_to_hier_hdf5_wcte.py` |
+| Super-K WatChMaL flat `.hy` | `hy_flat_to_hier_hdf5.py` | Flat HDF5 (`event_hits_index` + jagged hits) → same hierarchical layout; `geometry: SK` |
 
 **Output layout:** one HDF5 group per kept event:
 
@@ -62,10 +63,33 @@ Or via the unified driver:
 python root_to_hier_hdf5.py --detector WCTE --config configs/data_extraction_config_WCTE_example.yaml
 ```
 
+### Super-K WatChMaL flat `.hy`
+
+See **[doc/SK_HY_TO_HDF5_PIPELINE.md](doc/SK_HY_TO_HDF5_PIPELINE.md)** for the full chunked SLURM workflow, charge cuts, concat staging, and troubleshooting.
+
+#### Chunked CLI (manual)
+
+All production conversions use **chunked** array jobs + concat (never a single monolithic pass over the full `.hy`).
+
+```bash
+# One array task (smoke / small subset)
+python hy_flat_to_hier_hdf5.py \
+  --input /path/to/multi_combine.hy \
+  --output /path/to/stem.h5 \
+  --indices-npz /path/to/keep_event_indices.npz \
+  --chunk-index 0 --events-per-chunk 1000 \
+  --min-hit-charge 0.11 --max-hit-charge 51.0
+
+# Merge chunks
+python utils/concat_hier_hdf5_chunks.py \
+  --glob '/path/to/chunks/stem_chunk_*.h5' \
+  --output /path/to/sk_out.h5
+```
+
 Inspect one event:
 
 ```bash
-python utils/inspect_hdf5_event.py /path/to/out.h5 0
+python utils/inspect_hdf5_event.py --file /path/to/out.h5 --event 0
 ```
 
 ## SLURM (CC-IN2P3)
@@ -76,9 +100,11 @@ Edit paths at the top of the submit wrappers, then:
 ./launch/submit_root_to_hdf5.sh configs/data_extraction_config_e-_train_val_set.yaml
 ./launch/submit_wcte_root_to_hdf5.sh configs/data_extraction_config_WCTE_example.yaml
 ./launch/submit_hkfd_elneg_root_to_hdf5.sh   # HK FD production-style job
+./launch/submit_sk_hy_to_hdf5.sh             # Super-K .hy: chunk array + concat
+./launch/submit_sk_hy_smoke_1k.sh            # 1k-event smoke (1 chunk)
 ```
 
-Worker scripts: `launch/root_to_hdf5_slurm.sh`, `launch/wcte_root_to_hdf5_slurm.sh`.  
+Worker scripts: `launch/root_to_hdf5_slurm.sh`, `launch/wcte_root_to_hdf5_slurm.sh`, `launch/sk_hy_to_h5_slurm.sh`, `launch/sk_hy_concat_slurm.sh`.  
 Each run creates a timestamped folder under `jobs/` (gitignored).
 
 Clean old job dirs: `./clean_jobs.sh`
@@ -94,6 +120,7 @@ PMT positions and tube-id tables are **not** stored in this repo. They live in G
 ## Documentation
 
 - [doc/PIPELINES_OVERVIEW.md](doc/PIPELINES_OVERVIEW.md) — full ROOT → HDF5 → GhostHunter pipelines (HK FD, WCTE, benchmarks)
+- [doc/SK_HY_TO_HDF5_PIPELINE.md](doc/SK_HY_TO_HDF5_PIPELINE.md) — Super-K WatChMaL `.hy` chunked conversion (SLURM, charge cuts, concat)
 - [doc/STATE_OF_NTUPLE_MANAGER.md](doc/STATE_OF_NTUPLE_MANAGER.md) — component status
 - [doc/GEOMETRY_MAPPING_README.md](doc/GEOMETRY_MAPPING_README.md) — HK field mapping details
 
@@ -102,6 +129,7 @@ PMT positions and tube-id tables are **not** stored in this repo. They live in G
 ```text
 root_to_hier_hdf5.py      # HK + WCTE dispatcher (YAML for HK)
 root_to_hier_hdf5_wcte.py # WCTE v2 dedicated converter
+hy_flat_to_hier_hdf5.py   # WatChMaL flat Super-K .hy converter
 utils/                    # HDF5 writer, geometry map, helpers
 configs/                  # Example YAML extraction configs
 launch/                   # SLURM submit + worker scripts
