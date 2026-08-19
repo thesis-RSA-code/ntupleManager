@@ -1,0 +1,40 @@
+# Example cut masks for WCTE hierarchical HDF5 (GhostHunter schema).
+# Run:
+#   python utils/build_hdf5_cut_masks.py --config configs/wcte_cut_masks_example.yaml
+
+hdf5_path: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/h5/WCTE_uni_iso_FC_e-_0-1000MeV_TEST.h5
+output: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/masks/wcte_test_cuts.npz
+event_prefix: event_
+
+# Each cut: field (scalar dataset in event_<i>/ or 1-D array → length used for n_hits),
+# op, value. Supported ops: gt, ge, lt, le, eq, ne, between, in
+cuts:
+  energy_window:
+    field: energy
+    op: between
+    value: [0.0, 1000.0]
+
+  nhits10:
+    field: n_digi_hits
+    op: ge
+    value: 10
+
+  nhits200:
+    field: n_digi_hits
+    op: ge
+    value: 200
+
+  dwall50:
+    field: dwall
+    op: ge
+    value: 50.0
+
+  towall100:
+    field: towall
+    op: ge
+    value: 100.0
+
+# Optional combined masks (boolean AND of named cuts)
+combine:
+  good: [energy_window, nhits200, dwall50]
+  loose: [energy_window, nhits10]

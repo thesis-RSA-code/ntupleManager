@@ -1,0 +1,12 @@
+# WCTE e- TEST: exclude events with n_digi_hits < 400.
+# True = keep (n_digi_hits >= 400); False = masked out.
+
+hdf5_path: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/h5/WCTE_uni_iso_FC_e-_0-1000MeV_TEST.h5
+output: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/masks/WCTE_uni_iso_FC_e-_0-1000MeV_TEST_nhits_ge400.npz
+event_prefix: event_
+
+cuts:
+  nhits_ge400:
+    field: n_digi_hits
+    op: ge
+    value: 400

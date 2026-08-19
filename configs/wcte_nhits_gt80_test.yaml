@@ -1,0 +1,9 @@
+hdf5_path: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/h5/WCTE_uni_iso_FC_e-_0-1000MeV_TEST.h5
+output: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/npz_cuts/WCTE_uni_iso_FC_e-_0-1000MeV_TEST+nhits_gt80.npz
+event_prefix: event_
+
+cuts:
+  nhits_gt80:
+    field: n_digi_hits
+    op: gt
+    value: 80

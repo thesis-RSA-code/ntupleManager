@@ -1,0 +1,12 @@
+# Mask WCTE TRAIN_VAL: exclude events with energy < 300 MeV.
+# True = keep (energy >= 300 MeV); False = masked out.
+
+hdf5_path: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/h5/WCTE_uni_iso_FC_e-_0-1000MeV_TRAIN_VAL.h5
+output: /sps/t2k/eleblevec/Datasets/prod_datasets/wcte_prod/masks/WCTE_uni_iso_FC_e-_0-1000MeV_TRAIN_VAL_energy_ge_300.npz
+event_prefix: event_
+
+cuts:
+  energy_ge_300:
+    field: energy
+    op: ge
+    value: 300.0
