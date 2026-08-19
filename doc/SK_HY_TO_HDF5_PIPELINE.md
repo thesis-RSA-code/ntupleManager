@@ -191,7 +191,7 @@ python utils/concat_hier_hdf5_chunks.py \
 /event_0/
     n_digi_hits         (int32)
     energy              (float32, MeV)
-    event_type          (int32, WatChMaL label: 0=γ, 1=e, 2=μ)
+    event_type          (int32, WatChMaL class index, production-dependent -- see below)
     vertex_x/y/z        (float32, cm)
     particle_dir_x/y/z  (float32)
     pmt_charge          (float32[n_hits], p.e., after charge cuts)
@@ -257,13 +257,27 @@ python utils/inspect_hdf5_event.py --file /path/to/out.h5 --event 0
 
 ## WatChMaL label mapping (pgun)
 
-Stored as-is in `event_type` (not PDG):
+Stored as-is in `event_type` (**not** PDG).  It is a WatChMaL *class index* and it is
+**production-dependent** -- do not assume it.  For the SK-IV particle-gun production
+`Datasets/sk_iv/pgun_ccan/` (`multi_combine.hy`) it is:
 
-| `labels` in `.hy` | Particle |
-|-------------------|----------|
-| 0 | γ |
-| 1 | e |
-| 2 | μ |
+| `labels` in `.hy` | Particle | Min. total energy in the production |
+|-------------------|----------|-------------------------------------|
+| 0 | mu- | 159.92 MeV |
+| 1 | e-  | 0.50 MeV |
+| 2 | pi+ | 211.58 MeV |
+
+Verified 2026-08-03: those minima are the water Cherenkov thresholds,
+sqrt(120^2 + 105.66^2) = 159.92 for mu- and sqrt(159^2 + 139.57^2) = 211.58 for pi+.
+`energies` is therefore **total** energy, rest mass included; and `event_ids` is *not*
+the particle type -- it is the 0-based event id inside the source ROOT job (0..998).
+
+To identify the mapping in a new production, histogram `energies` per label value: the
+minimum of each is that particle's Cherenkov threshold.  `hy_flat_to_hier_hdf5.py` and
+`utils/build_uniform_energy_indices.py` carry the same table.
+
+An earlier revision of this document gave 0=gamma, 1=e, 2=mu.  That is the WatChMaL
+tutorial ordering, not this production's, and using it mislabels every event.
 
 Remap downstream if your training config expects PDG codes.
 
